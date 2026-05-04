@@ -344,3 +344,369 @@ delay();
 
 </body>
 </html>
+
+
+    <br><br><br>
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARM Codes - Copy Practice</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #111827;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      background: #111827;
+      color: white;
+    }
+
+    .card-header h2 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    button {
+      border: none;
+      background: #22c55e;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    pre {
+      margin: 0;
+      padding: 18px;
+      overflow-x: auto;
+      background: #0b1020;
+      color: #e5e7eb;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    code {
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      white-space: pre;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #111827;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: none;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ARM Assembly Practice Codes</h1>
+    
+      <section class="card">
+        <div class="card-header">
+          <h2>bsquare - 4ac / 2a</h2>
+          <button onclick="copyCode('code1', this)">Copy</button>
+        </div>
+        <pre><code id="code1">AREA practice,CODE,READONLY
+	EXPORT __main
+__main
+	LDR r0,=0x20000000
+	LDR r1,[r0],#4
+	LDR r2,[r0],#4
+	LDR r3,[r0],#4
+	MUL r2,r2,r2
+	MOV r4,#4
+	MUL r5,r3,r4
+	MUL r6,r5,r1
+	SUB r7,r2,r6
+	MOV r5,#2
+	MUL r8,r1,r5
+	UDIV r9,r7,r8
+	STR r9,[r0],#4
+l b l
+	END</code></pre>
+      </section>
+    
+      <section class="card">
+        <div class="card-header">
+          <h2>ASCII to packed</h2>
+          <button onclick="copyCode('code2', this)">Copy</button>
+        </div>
+        <pre><code id="code2">AREA asciitopacked,CODE,READONLY
+	EXPORT __main
+__main
+	LDR r0,=0x20000000
+	LDR r1,[r0],#4
+	LDR r2,[r0],#4
+	AND r3,r1,0x0F
+	AND r4,r2,0x0F
+	ORR r5,r4,r3,LSL #4
+	STR r5,[r0]
+l	b	l
+	end</code></pre>
+      </section>
+    
+      <section class="card">
+        <div class="card-header">
+          <h2>ASCII to unpacked</h2>
+          <button onclick="copyCode('code3', this)">Copy</button>
+        </div>
+        <pre><code id="code3">AREA asciitounpacked,CODE,READONLY
+	EXPORT __main
+__main
+	LDR r0,=0x20000000
+	LDR r1,[r0],#4
+	AND r3,r1,#0x0F
+	STR r3,[r0],#4
+l	b	l
+	end</code></pre>
+      </section>
+    
+      <section class="card">
+        <div class="card-header">
+          <h2>Linear search</h2>
+          <button onclick="copyCode('code4', this)">Copy</button>
+        </div>
+        <pre><code id="code4">AREA linearsearch,CODE,READONLY
+	EXPORT __main
+__main
+	LDR r0,=0x20000000
+	LDR r1,[r0],#4
+	mov r2,#0
+	LDR r3,[r0],#4
+loop	LDR r4,[r0],#4
+		CMP r3,r4
+		BEQ found
+		ADD r2,r2,#1
+		sub r1,r1,#1
+		cmp r1,#0
+		bne loop
+		B	notfound
+found 
+		STR r2,[r0,#34]
+		b	l
+notfound	
+	MOV r2,#-1
+	STRB r2,[r0,#34]
+l	b	l
+	end</code></pre>
+      </section>
+    
+      <section class="card">
+        <div class="card-header">
+          <h2>Sorting</h2>
+          <button onclick="copyCode('code5', this)">Copy</button>
+        </div>
+        <pre><code id="code5">AREA MYCODE, CODE, READONLY
+        EXPORT __main
+__main
+        LDR R0, =ARRAY          ; source array
+        LDR R6, =0x20000000     ; destination RAM
+        MOV R5, #5              ; number of elements
+COPY
+        LDR R1, [R0], #4        ; load from ARRAY
+        STR R1, [R6], #4        ; store to RAM
+        SUBS R5, R5, #1
+        BNE COPY
+
+        MOV R4,#4               ; outer loop
+
+OUTER
+        LDR R6, =0x20000000     ; reset pointer
+        MOV R2,#4               ; inner loop
+
+INNER
+        LDR R3,[R6]
+        LDR R1,[R6,#4]
+        CMP R3,R1
+        BLE NOSWAP
+
+        STR R1,[R6]
+        STR R3,[R6,#4]
+
+NOSWAP
+        ADD R6,R6,#4
+        SUBS R2,R2,#1
+        BNE INNER
+
+        SUBS R4,R4,#1
+        BNE OUTER
+
+STOP
+        B STOP
+ARRAY DCD 5,1,4,2,3
+        END</code></pre>
+      </section>
+    
+      <section class="card">
+        <div class="card-header">
+          <h2>Factorial with subroutine</h2>
+          <button onclick="copyCode('code6', this)">Copy</button>
+        </div>
+        <pre><code id="code6">AREA factorial,CODE,READONLY
+	EXPORT __main
+__main	PROC
+	LDR r0,=0x20000000
+	LDR r1,[r0,#0]
+	BL fact
+	STR r3,[r0,#4]
+l	b	l
+	ENDP
+fact	PROC
+			mov r2,r1
+			mov r3,#1
+loop	
+		mul r3,r2,r3
+			sub r2,r2,#1
+			cmp r2,#0
+			bne loop
+		BX LR
+
+		ENDP
+	end</code></pre>
+      </section>
+    
+      <section class="card">
+        <div class="card-header">
+          <h2>Recursive factorial</h2>
+          <button onclick="copyCode('code7', this)">Copy</button>
+        </div>
+        <pre><code id="code7">AREA factorialrec,CODE,READONLY
+	EXPORT __main
+__main	PROC
+	LDR r0,=0x20000000
+	LDR r1,[r0,#0]
+	BL	fact
+	STR r1,[r0,#4]
+l	b	l
+	ENDP
+fact	PROC
+	sub sp,sp,#8
+	STR LR,[sp,#4]
+	STR r1,[sp,#0]
+	cmp r1,#1
+	bgt  L1
+	b	lpop
+L1
+	sub r1,r1,#1
+	BL fact
+lpop	
+	mov r12,r1
+	LDR r1,[sp,#0]
+	LDR LR,[sp,#4]
+	ADD sp,sp,#8
+	mul r1,r12,r1
+	mov pc,LR
+	ENDP
+	END</code></pre>
+      </section>
+    
+      <section class="card">
+        <div class="card-header">
+          <h2>Without overlap</h2>
+          <button onclick="copyCode('code8', this)">Copy</button>
+        </div>
+        <pre><code id="code8">AREA overlap,CODE,READONLY
+	EXPORT __main
+__main
+	LDR r0,=0x20000000
+	LDR r1,=0x20000050
+	LDR r2,[r0],#4
+loop	LDR r3,[r0],#4
+		STR r3,[r1],#4
+		SUBS r2,r2,#1
+		cmp r2,#0
+		bne loop
+l	b	l
+	end</code></pre>
+      </section>
+    
+      <section class="card">
+        <div class="card-header">
+          <h2>With overlap</h2>
+          <button onclick="copyCode('code9', this)">Copy</button>
+        </div>
+        <pre><code id="code9">AREA overlap,CODE,READONLY
+	EXPORT __main
+__main
+	LDR r0,=0x20000000
+	LDR r1,[r0],#4	
+	ADD r3,r0,r1,LSL #2
+loop	LDR r2,[r3,#-4]
+		STR r2,[r3],#-4
+		SUBS r1,r1,#1
+		CMP r1,#0
+		bne loop
+stop	b	stop
+	end</code></pre>
+      </section>
+    
+  </div>
+
+  <div class="toast" id="toast">Copied!</div>
+
+  <script>
+    function copyCode(id, button) {
+      const code = document.getElementById(id).innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        const oldText = button.innerText;
+        button.innerText = "Copied";
+
+        const toast = document.getElementById("toast");
+        toast.style.display = "block";
+
+        setTimeout(() => {
+          button.innerText = oldText;
+          toast.style.display = "none";
+        }, 1200);
+      });
+    }
+  </script>
+</body>
+</html>
